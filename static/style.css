@@ -4,15 +4,17 @@
 
 /* CSS Variables for Theme System - Professional Edition v3.0 */
 :root {
-    /* Brand Colors */
-    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --primary-color: #667eea;
-    --primary-dark: #764ba2;
-    --secondary-color: #4ade80;
+    /* Brand Colors - Modern Professional Palette */
+    --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    --primary-color: #6366f1;
+    --primary-dark: #8b5cf6;
+    --primary-light: #a5b4fc;
+    --secondary-color: #10b981;
     --accent-color: #f59e0b;
     --success-color: #10b981;
     --error-color: #ef4444;
     --warning-color: #f59e0b;
+    --info-color: #3b82f6;
 
     /* Surface Colors */
     --background-color: #f8fafc;
@@ -82,12 +84,13 @@
     --transition-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Dark Mode Variables - Enhanced */
+/* Dark Mode Variables - Enhanced Professional */
 body.dark-mode {
-    /* Brand Colors */
-    --primary-gradient: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+    /* Brand Colors - Vibrant yet professional */
+    --primary-gradient: linear-gradient(135deg, #7c3aed 0%, #a78bfa 50%, #c4b5fd 100%);
     --primary-color: #8b5cf6;
     --primary-dark: #a78bfa;
+    --primary-light: #c4b5fd;
     --secondary-color: #34d399;
     --accent-color: #fbbf24;
 
@@ -121,7 +124,10 @@ body.dark-mode {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    /* Professional font stack with Vietnamese support */
+    font-family: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                 Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+                 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     font-size: var(--font-size-base);
     line-height: var(--line-height-normal);
     font-weight: var(--font-weight-normal);
@@ -132,6 +138,8 @@ body {
     transition: background var(--transition-speed) var(--transition-function);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
 body.dark-mode {
@@ -297,9 +305,11 @@ body.dark-mode .theme-toggle .moon-icon {
 }
 
 .header-info h1 {
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 5px;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .status {
@@ -399,16 +409,18 @@ body.dark-mode .theme-toggle .moon-icon {
 
 .message-text {
     background: var(--surface-color);
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-6);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-sm);
     white-space: pre-wrap;
     line-height: var(--line-height-relaxed);
-    font-size: var(--font-size-base);
+    font-size: 15px;
     color: var(--text-primary);
     transition: all var(--transition-speed) var(--transition-function);
     word-wrap: break-word;
     overflow-wrap: break-word;
+    hyphens: auto;
+    letter-spacing: 0.01em;
 }
 
 .message-text:hover {
@@ -565,20 +577,28 @@ body.dark-mode .user-message .message-text {
 }
 
 .suggestion-btn {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
     color: white;
-    border: 2px solid rgba(255, 255, 255, 0.25);
-    padding: 16px 20px;
-    border-radius: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 18px 24px;
+    border-radius: 14px;
     cursor: pointer;
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 15.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-    text-align: left;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    min-height: 68px;
 }
 
 .suggestion-btn::before {
@@ -588,9 +608,12 @@ body.dark-mode .user-message .message-text {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(135deg,
+                rgba(255,255,255,0.25) 0%,
+                rgba(255,255,255,0.1) 50%,
+                rgba(255,255,255,0) 100%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .suggestion-btn:hover::before {
@@ -598,14 +621,17 @@ body.dark-mode .user-message .message-text {
 }
 
 .suggestion-btn:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25),
+                0 2px 8px rgba(0, 0, 0, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .suggestion-btn:active {
-    transform: translateY(-2px) scale(0.98);
+    transform: translateY(-3px) scale(1.0);
+    transition-duration: 0.1s;
 }
 
 /* Typing Indicator */
@@ -762,18 +788,22 @@ body.dark-mode .user-message .message-text {
 }
 
 .quick-action-btn {
-    background: linear-gradient(135deg, var(--background-color) 0%, var(--surface-color) 100%);
+    background: linear-gradient(135deg, var(--surface-color) 0%, var(--background-color) 100%);
     border: 2px solid var(--border-color);
-    padding: 12px 16px;
-    border-radius: 12px;
+    padding: 13px 18px;
+    border-radius: 11px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     color: var(--text-primary);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .quick-action-btn::before {
@@ -798,8 +828,10 @@ body.dark-mode .user-message .message-text {
 .quick-action-btn:hover {
     color: white;
     border-color: var(--primary-color);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.35),
+                0 2px 8px rgba(99, 102, 241, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .quick-action-btn span,
