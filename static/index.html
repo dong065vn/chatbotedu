@@ -91,16 +91,16 @@
                             <p>Hãy bắt đầu bằng cách gõ <code>trợ giúp</code> hoặc thử các gợi ý bên dưới:</p>
                             <div class="suggestions">
                                 <button class="suggestion-btn" onclick="sendSuggestion('Thêm lịch học Toán vào thứ 2, 8h-10h')">
-                                    📚 Thêm lịch học
+                                    <span>📚 Thêm lịch học</span>
                                 </button>
                                 <button class="suggestion-btn" onclick="sendSuggestion('Lịch học hôm nay')">
-                                    📅 Xem lịch hôm nay
+                                    <span>📅 Xem lịch hôm nay</span>
                                 </button>
                                 <button class="suggestion-btn" onclick="sendSuggestion('Khi nào nên nghỉ ngơi?')">
-                                    😌 Thời gian nghỉ ngơi
+                                    <span>😌 Thời gian nghỉ ngơi</span>
                                 </button>
                                 <button class="suggestion-btn" onclick="sendSuggestion('Tư vấn thời gian học')">
-                                    💡 Tư vấn học tập
+                                    <span>💡 Tư vấn học tập</span>
                                 </button>
                             </div>
                         </div>
@@ -144,10 +144,30 @@
                     </div>
                 </form>
                 <div class="quick-actions" id="quickActions">
-                    <button class="quick-action-btn" onclick="sendSuggestion('Lịch học hôm nay')">📅 Lịch hôm nay</button>
-                    <button class="quick-action-btn" onclick="sendSuggestion('Lịch thi sắp tới')">📝 Lịch thi</button>
-                    <button class="quick-action-btn" onclick="sendSuggestion('Phân tích thói quen')">📊 Phân tích</button>
-                    <button class="quick-action-btn" onclick="sendSuggestion('Tư vấn học tập')">💡 Tư vấn</button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Lịch học hôm nay')">
+                        <span>📅 Lịch hôm nay</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Lịch thi sắp tới')">
+                        <span>📝 Lịch thi</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Phân tích thói quen học tập')">
+                        <span>📊 Phân tích</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Tư vấn thời gian học tập hiệu quả')">
+                        <span>💡 Tư vấn</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Xuất dữ liệu thành file JSON')">
+                        <span>💾 Xuất dữ liệu</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Xóa lịch học')">
+                        <span>🗑️ Xóa lịch</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Báo cáo hiệu suất học tập')">
+                        <span>📈 Báo cáo</span>
+                    </button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Đặt nhắc nhở')">
+                        <span>⏰ Nhắc nhở</span>
+                    </button>
                 </div>
             </div>
         </div>
