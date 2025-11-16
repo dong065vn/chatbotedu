@@ -8,14 +8,15 @@ from typing import Optional
 import uvicorn
 
 from app.database import get_db, init_db
-from app.chatbot import ChatBot
+from app.chatbot_v2 import ChatBotV2
 from app.models import User
+import os
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Chatbot Quản lý Thời gian",
-    description="AI Chatbot hỗ trợ quản lý lịch học, lịch thi và tư vấn thời gian học tập",
-    version="1.0.0"
+    description="AI Chatbot với Gemini - Hỗ trợ quản lý lịch học, lịch thi và tư vấn thời gian học tập",
+    version="2.0.0"
 )
 
 # Mount static files
@@ -37,6 +38,14 @@ async def startup_event():
     """Initialize database tables"""
     init_db()
     print("✅ Database initialized successfully")
+
+    # Check Gemini API key
+    if os.getenv("GEMINI_API_KEY"):
+        print("🤖 Gemini AI: ENABLED")
+    else:
+        print("⚠️  Gemini AI: DISABLED (No API key found)")
+        print("   Set GEMINI_API_KEY in .env to enable AI features")
+
     print("🚀 Chatbot server is running!")
     print("📱 Open http://localhost:8000 in your browser")
 
@@ -60,10 +69,10 @@ async def read_root():
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(message: ChatMessage, db: Session = Depends(get_db)):
     """
-    Process chat message and return response
+    Process chat message and return response with Gemini AI
     """
     try:
-        chatbot = ChatBot(db, user_id=message.user_id)
+        chatbot = ChatBotV2(db, user_id=message.user_id, use_gemini=True)
         result = chatbot.process_message(message.message)
         return result
     except Exception as e:
@@ -75,7 +84,8 @@ async def health_check():
     return {
         "status": "healthy",
         "service": "Chatbot Quản lý Thời gian",
-        "version": "1.0.0"
+        "version": "2.0.0",
+        "gemini_enabled": bool(os.getenv("GEMINI_API_KEY"))
     }
 
 @app.get("/api/user/{user_id}")
