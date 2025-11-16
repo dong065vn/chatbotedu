@@ -488,6 +488,31 @@ docker logs -f container_name
 
 ## 🆘 Troubleshooting
 
+### Lỗi "Failed building wheel for pydantic-core" trên Render:
+**Nguyên nhân:** Pydantic version cũ yêu cầu build từ Rust source code, Render thiếu maturin/Rust compiler.
+
+**Giải pháp:**
+1. Upgrade pydantic lên phiên bản có pre-built wheels:
+   ```txt
+   pydantic==2.6.4
+   pydantic-settings==2.2.1
+   ```
+
+2. Cập nhật `render.yaml` với build command tối ưu:
+   ```yaml
+   buildCommand: pip install --upgrade pip && pip install --only-binary :all: --no-build-isolation -r requirements.txt || pip install -r requirements.txt
+   envVars:
+     - key: PIP_NO_CACHE_DIR
+       value: "1"
+     - key: PIP_PREFER_BINARY
+       value: "1"
+   ```
+
+3. Upgrade Python version trong `runtime.txt`:
+   ```
+   python-3.11.9
+   ```
+
 ### Lỗi "Application Error" trên Render:
 ```bash
 # Check logs trong dashboard
