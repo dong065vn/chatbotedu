@@ -18,10 +18,11 @@ Chatbot AI thông minh sử dụng **Gemini AI** để giúp sinh viên quản l
 - **Glass Morphism**: Hiệu ứng kính mờ backdrop trendy
 
 ### 🚀 Tính năng mới
+- **📸 AI Vision**: Tải ảnh lịch học/thi và AI tự động trích xuất thông tin
 - **📊 Thống kê Real-time**: Theo dõi số tin nhắn, lịch học, lịch thi
 - **💾 Xuất Chat History**: Lưu cuộc trò chuyện ra file TXT
 - **😊 Emoji Picker**: Chọn emoji nhanh chóng cho tin nhắn
-- **⚡ Quick Actions**: 4 nút action thường dùng nhất
+- **⚡ Quick Actions**: 8 nút action thường dùng nhất
 - **🔔 Toast Notifications**: Thông báo đẹp mắt, thông minh
 - **⌨️ Keyboard Shortcuts**: Phím tắt tiện lợi
 - **🔄 Auto-save**: Tự động lưu lịch sử chat
@@ -29,9 +30,11 @@ Chatbot AI thông minh sử dụng **Gemini AI** để giúp sinh viên quản l
 
 ### 🤖 AI Features
 - **Gemini AI Integration**: Trò chuyện tự nhiên với AI thông minh
+- **Gemini Vision API**: Trích xuất thông tin lịch học/thi từ ảnh
 - **Context Awareness**: AI hiểu ngữ cảnh và lịch trình của bạn
 - **Smart Recommendations**: Gợi ý thời gian học tập tối ưu
 - **Pattern Analysis**: Phân tích thói quen học tập
+- **Image Recognition**: Nhận diện và xử lý ảnh lịch học/thi
 
 ### 📚 Quản lý Học tập
 - ✅ Quản lý lịch học theo tuần
@@ -158,6 +161,20 @@ http://localhost:8000
 "Giúp tôi lên kế hoạch ôn thi"
 ```
 
+### Tải ảnh lịch học/thi
+```
+1. Click nút 📸 bên trái ô input
+2. Chọn ảnh từ thiết bị (JPG, PNG, GIF, BMP, WEBP)
+3. AI sẽ tự động phân tích và trích xuất thông tin
+4. Xem kết quả và xác nhận để lưu vào hệ thống
+```
+
+**Lưu ý:**
+- Ảnh cần rõ nét, chứa thông tin lịch học/thi
+- Hỗ trợ cả tiếng Việt và tiếng Anh
+- Kích thước tối đa: 10MB
+- AI sẽ trả về độ tin cậy (confidence score)
+
 ### Phím tắt
 - `Ctrl + K`: Focus input
 - `Ctrl + L`: Xóa chat
@@ -174,6 +191,8 @@ http://localhost:8000
 - **SQLAlchemy**: ORM mạnh mẽ
 - **SQLite**: Database nhẹ, không cần setup
 - **Google Gemini AI**: Large Language Model thông minh
+- **Gemini Vision API**: AI xử lý và phân tích hình ảnh
+- **Pillow**: Thư viện xử lý hình ảnh Python
 - **Python 3.8+**: Ngôn ngữ lập trình chính
 
 ### Frontend
@@ -200,13 +219,18 @@ chatbotedu/
 │   ├── __init__.py
 │   ├── ai_engine.py          # AI recommendation engine
 │   ├── chatbot_v2.py          # Main chatbot logic với Gemini
+│   ├── data_export.py         # Data export/import module
 │   ├── database.py            # Database configuration
 │   ├── gemini_ai.py           # Gemini API integration
-│   └── models.py              # SQLAlchemy models
+│   ├── image_processor.py     # AI Vision image processing
+│   ├── models.py              # SQLAlchemy models
+│   └── smart_assistant.py     # Intelligent assistant features
 ├── static/
 │   ├── index.html             # UI với modern design
 │   ├── style.css              # Professional styles v2.0
 │   └── script.js              # Enhanced JavaScript v2.0
+├── uploads/                   # Temporary image storage
+│   └── .gitkeep              # Keep directory in git
 ├── .env.example               # Environment variables template
 ├── .gitignore                 # Git ignore file
 ├── FEATURES.md                # Detailed features documentation
@@ -255,6 +279,33 @@ GET /api/health
 ### User Info
 ```http
 GET /api/user/{user_id}
+```
+
+### Image Upload (NEW)
+```http
+POST /api/upload-image
+Content-Type: multipart/form-data
+
+file: <image_file>
+user_id: 1 (optional)
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Image analyzed successfully",
+    "analysis": {
+        "success": true,
+        "type": "schedule",
+        "extracted_data": {
+            "schedules": [...],
+            "exams": [...]
+        },
+        "confidence": 0.85
+    },
+    "formatted_response": "📸 KẾT QUẢ PHÂN TÍCH ẢNH..."
+}
 ```
 
 ---

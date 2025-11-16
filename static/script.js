@@ -49,6 +49,8 @@ function setupEventListeners() {
     const toggleSidebar = document.getElementById('toggleSidebar');
     const emojiButton = document.getElementById('emojiButton');
     const voiceInput = document.getElementById('voiceInput');
+    const imageUploadButton = document.getElementById('imageUploadButton');
+    const imageUploadInput = document.getElementById('imageUploadInput');
 
     // Form submission
     form.addEventListener('submit', handleFormSubmit);
@@ -81,6 +83,17 @@ function setupEventListeners() {
     // Voice input
     if (voiceInput) {
         voiceInput.addEventListener('click', handleVoiceInput);
+    }
+
+    // Image upload
+    if (imageUploadButton) {
+        imageUploadButton.addEventListener('click', () => {
+            imageUploadInput.click();
+        });
+    }
+
+    if (imageUploadInput) {
+        imageUploadInput.addEventListener('change', handleImageUpload);
     }
 
     // Keyboard shortcuts
@@ -574,6 +587,84 @@ window.addEventListener('resize', () => {
         sidebar.classList.remove('visible');
     }
 });
+
+// ============================================
+//   Image Upload Handler
+// ============================================
+
+async function handleImageUpload(event) {
+    const file = event.target.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+        showNotification('❌ Chỉ hỗ trợ file ảnh (JPG, PNG, GIF, BMP, WEBP)', 'error');
+        event.target.value = '';
+        return;
+    }
+
+    // Validate file size (10MB)
+    const maxSize = 10 * 1024 * 1024;
+    if (file.size > maxSize) {
+        showNotification('❌ File quá lớn. Kích thước tối đa: 10MB', 'error');
+        event.target.value = '';
+        return;
+    }
+
+    // Show user message
+    const userMessage = `📸 Đang tải ảnh: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+    addMessage('user', userMessage);
+
+    // Show typing indicator
+    showTypingIndicator();
+
+    try {
+        // Create FormData
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // Upload to API
+        const response = await fetch('/api/upload-image', {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.detail || 'Upload failed');
+        }
+
+        if (result.success) {
+            // Display formatted response
+            addMessage('bot', result.formatted_response);
+
+            // Show success notification
+            showNotification('✅ Phân tích ảnh thành công!', 'success');
+
+            // Log extracted data to console for debugging
+            console.log('Extracted data:', result.analysis);
+        } else {
+            throw new Error(result.message || 'Analysis failed');
+        }
+
+    } catch (error) {
+        console.error('Image upload error:', error);
+        addMessage('bot', `❌ **Lỗi xử lý ảnh:**\n\n${error.message}\n\n**Gợi ý:**\n• Kiểm tra kết nối internet\n• Đảm bảo ảnh rõ nét và chứa thông tin lịch học/thi\n• Thử lại với ảnh khác`);
+        showNotification('❌ Không thể xử lý ảnh', 'error');
+    } finally {
+        // Remove typing indicator
+        const typingArea = document.getElementById('typingArea');
+        if (typingArea) {
+            typingArea.innerHTML = '';
+        }
+        event.target.value = ''; // Reset input
+    }
+}
 
 // Export functions for HTML onclick handlers
 window.sendSuggestion = sendSuggestion;

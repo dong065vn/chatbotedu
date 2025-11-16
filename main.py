@@ -3,14 +3,14 @@ Main FastAPI Application - Optimized v2.0
 Educational Chatbot with Gemini AI Integration
 """
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, HTTPException, Depends, status
+from fastapi import FastAPI, HTTPException, Depends, status, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
-from typing import Optional
+from typing import Optional, Dict, Any
 import uvicorn
 import os
 from pathlib import Path
@@ -18,6 +18,7 @@ from pathlib import Path
 from app.database import get_db, init_db
 from app.chatbot_v2 import ChatBotV2
 from app.models import User
+from app.image_processor import ImageProcessor, ImageUploadHandler
 
 # Configuration
 BASE_DIR = Path(__file__).resolve().parent
@@ -111,6 +112,13 @@ class HealthResponse(BaseModel):
     service: str
     version: str
     gemini_enabled: bool
+
+class ImageUploadResponse(BaseModel):
+    """Image upload and analysis response"""
+    success: bool
+    message: str
+    analysis: Dict[str, Any]
+    formatted_response: str
 
 # Routes
 @app.get("/", response_class=HTMLResponse, include_in_schema=False)
@@ -212,11 +220,11 @@ async def get_stats(db: Session = Depends(get_db)):
     """Get statistics about schedules, exams, and users"""
     try:
         from app.models import Schedule, Exam
-        
+
         total_users = db.query(User).count()
         total_schedules = db.query(Schedule).count()
         total_exams = db.query(Exam).count()
-        
+
         return {
             "total_users": total_users,
             "total_schedules": total_schedules,
@@ -226,6 +234,89 @@ async def get_stats(db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=str(e)
+        )
+
+@app.post(
+    "/api/upload-image",
+    response_model=ImageUploadResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Upload and analyze schedule/exam image",
+    description="Upload an image containing schedule or exam information for AI analysis"
+)
+async def upload_image(
+    file: UploadFile = File(..., description="Image file containing schedule/exam data"),
+    user_id: Optional[int] = None,
+    db: Session = Depends(get_db)
+):
+    """
+    Upload and analyze image with Gemini Vision AI
+
+    - **file**: Image file (jpg, png, etc.) containing schedule or exam information
+    - **user_id**: Optional user identifier for associating the data
+
+    Returns extracted schedules and exams with confidence scores
+    """
+    try:
+        # Validate file
+        upload_handler = ImageUploadHandler()
+
+        if not upload_handler.is_allowed_file(file.filename):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid file type. Allowed: {upload_handler.allowed_extensions}"
+            )
+
+        # Read file data
+        file_data = await file.read()
+
+        # Check file size
+        if len(file_data) > upload_handler.max_file_size:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"File too large. Max size: {upload_handler.max_file_size / 1024 / 1024}MB"
+            )
+
+        # Save file
+        saved_path = upload_handler.save_upload(file_data, file.filename)
+        if not saved_path:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Failed to save uploaded file"
+            )
+
+        # Process with Gemini Vision
+        try:
+            processor = ImageProcessor()
+            analysis_result = processor.analyze_schedule_image(file_data, file.filename)
+
+            if not analysis_result['success']:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail=f"Image analysis failed: {analysis_result.get('error', 'Unknown error')}"
+                )
+
+            # Format response
+            formatted_response = processor.process_and_format_response(analysis_result)
+
+            return {
+                "success": True,
+                "message": "Image analyzed successfully",
+                "analysis": analysis_result,
+                "formatted_response": formatted_response
+            }
+
+        except ValueError as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Gemini API error: {str(e)}"
+            )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unexpected error: {str(e)}"
         )
 
 # Error handlers
