@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Quản lý Thời gian</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="header-content">
+                    <div class="bot-avatar">🤖</div>
+                    <div class="header-info">
+                        <h1>Trợ lý AI Quản lý Thời gian</h1>
+                        <p class="status">
+                            <span class="status-dot"></span>
+                            Đang hoạt động
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <div class="message-text">
+                            <p>Xin chào! 👋</p>
+                            <p>Tôi là trợ lý AI giúp bạn quản lý thời gian học tập hiệu quả.</p>
+                            <p><strong>Tôi có thể giúp bạn:</strong></p>
+                            <ul>
+                                <li>📚 Quản lý lịch học và lịch thi</li>
+                                <li>⏰ Tư vấn thời gian học hiệu quả</li>
+                                <li>🍽️ Dự đoán thời gian nghỉ ngơi và ăn uống</li>
+                                <li>📊 Phân tích thói quen học tập</li>
+                            </ul>
+                            <p>Hãy bắt đầu bằng cách gõ <code>trợ giúp</code> hoặc thử:</p>
+                            <div class="suggestions">
+                                <button class="suggestion-btn" onclick="sendSuggestion('Thêm lịch học Toán vào thứ 2, 8h-10h')">
+                                    📚 Thêm lịch học
+                                </button>
+                                <button class="suggestion-btn" onclick="sendSuggestion('Lịch học hôm nay')">
+                                    📅 Xem lịch hôm nay
+                                </button>
+                                <button class="suggestion-btn" onclick="sendSuggestion('Khi nào nên nghỉ ngơi?')">
+                                    😌 Thời gian nghỉ ngơi
+                                </button>
+                                <button class="suggestion-btn" onclick="sendSuggestion('Tư vấn thời gian học')">
+                                    💡 Tư vấn học tập
+                                </button>
+                            </div>
+                        </div>
+                        <div class="message-time" id="initialTime"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <form id="chatForm" class="chat-input-form">
+                    <input
+                        type="text"
+                        id="messageInput"
+                        class="chat-input"
+                        placeholder="Nhập tin nhắn của bạn..."
+                        autocomplete="off"
+                        required
+                    />
+                    <button type="submit" class="send-button" id="sendButton">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>📖 Hướng dẫn nhanh</h3>
+                <div class="quick-guide">
+                    <h4>Thêm lịch học:</h4>
+                    <p class="example">"Thêm lịch học Toán vào thứ 2, 8h-10h"</p>
+
+                    <h4>Thêm lịch thi:</h4>
+                    <p class="example">"Thêm lịch thi Lập trình ngày 15/12/2024, 8h"</p>
+
+                    <h4>Xem lịch:</h4>
+                    <p class="example">"Lịch học hôm nay"</p>
+                    <p class="example">"Lịch thi sắp tới"</p>
+
+                    <h4>Nhận tư vấn:</h4>
+                    <p class="example">"Tư vấn thời gian học"</p>
+                    <p class="example">"Khi nào nên nghỉ ngơi?"</p>
+                    <p class="example">"Phân tích thói quen học tập"</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>ℹ️ Thông tin</h3>
+                <div class="info-box">
+                    <p>Chatbot sử dụng AI để phân tích lịch trình và đưa ra gợi ý thông minh về thời gian học tập, nghỉ ngơi phù hợp với bạn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
