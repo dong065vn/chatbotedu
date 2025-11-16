@@ -617,7 +617,7 @@ async function handleImageUpload(event) {
 
     // Show user message
     const userMessage = `📸 Đang tải ảnh: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
-    addMessage('user', userMessage);
+    addMessage(userMessage, 'user');
 
     // Show typing indicator
     showTypingIndicator();
@@ -641,7 +641,7 @@ async function handleImageUpload(event) {
 
         if (result.success) {
             // Display formatted response
-            addMessage('bot', result.formatted_response);
+            addMessage(result.formatted_response, 'bot');
 
             // Show success notification
             showNotification('✅ Phân tích ảnh thành công!', 'success');
@@ -654,7 +654,7 @@ async function handleImageUpload(event) {
 
     } catch (error) {
         console.error('Image upload error:', error);
-        addMessage('bot', `❌ **Lỗi xử lý ảnh:**\n\n${error.message}\n\n**Gợi ý:**\n• Kiểm tra kết nối internet\n• Đảm bảo ảnh rõ nét và chứa thông tin lịch học/thi\n• Thử lại với ảnh khác`);
+        addMessage(`❌ **Lỗi xử lý ảnh:**\n\n${error.message}\n\n**Gợi ý:**\n• Kiểm tra kết nối internet\n• Đảm bảo ảnh rõ nét và chứa thông tin lịch học/thi\n• Thử lại với ảnh khác`, 'bot');
         showNotification('❌ Không thể xử lý ảnh', 'error');
     } finally {
         // Remove typing indicator
