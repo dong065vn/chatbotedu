@@ -3,40 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Quản lý Thời gian</title>
+    <title>Chatbot Quản lý Thời gian - AI Assistant</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
 </head>
 <body>
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" title="Chuyển đổi chế độ sáng/tối">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
     <div class="container">
         <div class="chat-container">
+            <!-- Enhanced Header -->
             <div class="chat-header">
                 <div class="header-content">
-                    <div class="bot-avatar">🤖</div>
+                    <div class="bot-avatar-wrapper">
+                        <div class="bot-avatar">🤖</div>
+                        <div class="avatar-pulse"></div>
+                    </div>
                     <div class="header-info">
                         <h1>Trợ lý AI Quản lý Thời gian</h1>
                         <p class="status">
                             <span class="status-dot"></span>
-                            Đang hoạt động
+                            <span id="statusText">Đang hoạt động</span>
                         </p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="icon-btn" id="clearChat" title="Xóa lịch sử chat">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                        <button class="icon-btn" id="exportChat" title="Xuất chat">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </button>
+                        <button class="icon-btn" id="toggleSidebar" title="Ẩn/Hiện thanh bên">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="9" y1="3" x2="9" y2="21"></line>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
 
+            <!-- Chat Messages -->
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot-message">
                     <div class="message-avatar">🤖</div>
                     <div class="message-content">
                         <div class="message-text">
                             <p>Xin chào! 👋</p>
-                            <p>Tôi là trợ lý AI giúp bạn quản lý thời gian học tập hiệu quả.</p>
+                            <p>Tôi là trợ lý AI giúp bạn quản lý thời gian học tập hiệu quả với công nghệ <strong>Gemini AI</strong>.</p>
                             <p><strong>Tôi có thể giúp bạn:</strong></p>
                             <ul>
                                 <li>📚 Quản lý lịch học và lịch thi</li>
                                 <li>⏰ Tư vấn thời gian học hiệu quả</li>
                                 <li>🍽️ Dự đoán thời gian nghỉ ngơi và ăn uống</li>
                                 <li>📊 Phân tích thói quen học tập</li>
+                                <li>💬 Trò chuyện tự nhiên về mọi vấn đề học tập</li>
                             </ul>
-                            <p>Hãy bắt đầu bằng cách gõ <code>trợ giúp</code> hoặc thử:</p>
+                            <p>Hãy bắt đầu bằng cách gõ <code>trợ giúp</code> hoặc thử các gợi ý bên dưới:</p>
                             <div class="suggestions">
                                 <button class="suggestion-btn" onclick="sendSuggestion('Thêm lịch học Toán vào thứ 2, 8h-10h')">
                                     📚 Thêm lịch học
@@ -57,8 +103,20 @@
                 </div>
             </div>
 
+            <!-- Typing Indicator Area -->
+            <div class="typing-area" id="typingArea"></div>
+
+            <!-- Chat Input -->
             <div class="chat-input-container">
                 <form id="chatForm" class="chat-input-form">
+                    <button type="button" class="attachment-button" id="voiceInput" title="Nhập bằng giọng nói (đang phát triển)">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                            <line x1="12" y1="19" x2="12" y2="23"></line>
+                            <line x1="8" y1="23" x2="16" y2="23"></line>
+                        </svg>
+                    </button>
                     <input
                         type="text"
                         id="messageInput"
@@ -67,45 +125,156 @@
                         autocomplete="off"
                         required
                     />
-                    <button type="submit" class="send-button" id="sendButton">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="22" y1="2" x2="11" y2="13"></line>
-                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                        </svg>
-                    </button>
+                    <div class="input-actions">
+                        <button type="button" class="emoji-button" id="emojiButton" title="Thêm emoji">
+                            😊
+                        </button>
+                        <button type="submit" class="send-button" id="sendButton">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
                 </form>
+                <div class="quick-actions" id="quickActions">
+                    <button class="quick-action-btn" onclick="sendSuggestion('Lịch học hôm nay')">📅 Lịch hôm nay</button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Lịch thi sắp tới')">📝 Lịch thi</button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Phân tích thói quen')">📊 Phân tích</button>
+                    <button class="quick-action-btn" onclick="sendSuggestion('Tư vấn học tập')">💡 Tư vấn</button>
+                </div>
             </div>
         </div>
 
-        <div class="sidebar">
-            <div class="sidebar-section">
-                <h3>📖 Hướng dẫn nhanh</h3>
-                <div class="quick-guide">
-                    <h4>Thêm lịch học:</h4>
-                    <p class="example">"Thêm lịch học Toán vào thứ 2, 8h-10h"</p>
-
-                    <h4>Thêm lịch thi:</h4>
-                    <p class="example">"Thêm lịch thi Lập trình ngày 15/12/2024, 8h"</p>
-
-                    <h4>Xem lịch:</h4>
-                    <p class="example">"Lịch học hôm nay"</p>
-                    <p class="example">"Lịch thi sắp tới"</p>
-
-                    <h4>Nhận tư vấn:</h4>
-                    <p class="example">"Tư vấn thời gian học"</p>
-                    <p class="example">"Khi nào nên nghỉ ngơi?"</p>
-                    <p class="example">"Phân tích thói quen học tập"</p>
+        <!-- Enhanced Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <!-- Stats Card -->
+            <div class="sidebar-section stats-card">
+                <h3>📊 Thống kê</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="messageCount">0</div>
+                        <div class="stat-label">Tin nhắn</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="scheduleCount">0</div>
+                        <div class="stat-label">Lịch học</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="examCount">0</div>
+                        <div class="stat-label">Lịch thi</div>
+                    </div>
                 </div>
             </div>
 
+            <!-- Quick Guide -->
+            <div class="sidebar-section">
+                <h3>📖 Hướng dẫn nhanh</h3>
+                <div class="quick-guide">
+                    <div class="guide-item">
+                        <h4>Thêm lịch học:</h4>
+                        <p class="example">"Thêm lịch học Toán vào thứ 2, 8h-10h"</p>
+                    </div>
+
+                    <div class="guide-item">
+                        <h4>Thêm lịch thi:</h4>
+                        <p class="example">"Thêm lịch thi Lập trình ngày 15/12/2024, 8h"</p>
+                    </div>
+
+                    <div class="guide-item">
+                        <h4>Xem lịch:</h4>
+                        <p class="example">"Lịch học hôm nay"</p>
+                        <p class="example">"Lịch thi sắp tới"</p>
+                    </div>
+
+                    <div class="guide-item">
+                        <h4>Nhận tư vấn:</h4>
+                        <p class="example">"Tư vấn thời gian học"</p>
+                        <p class="example">"Khi nào nên nghỉ ngơi?"</p>
+                        <p class="example">"Phân tích thói quen học tập"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Info -->
+            <div class="sidebar-section">
+                <h3>✨ Tính năng mới</h3>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <span class="feature-icon">🌓</span>
+                        <span>Chế độ tối/sáng</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">💾</span>
+                        <span>Xuất lịch sử chat</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🤖</span>
+                        <span>AI Gemini thông minh</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📱</span>
+                        <span>Giao diện responsive</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">⚡</span>
+                        <span>Trả lời nhanh chóng</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Box -->
             <div class="sidebar-section">
                 <h3>ℹ️ Thông tin</h3>
                 <div class="info-box">
-                    <p>Chatbot sử dụng AI để phân tích lịch trình và đưa ra gợi ý thông minh về thời gian học tập, nghỉ ngơi phù hợp với bạn.</p>
+                    <p>Chatbot sử dụng <strong>Gemini AI</strong> để phân tích lịch trình và đưa ra gợi ý thông minh về thời gian học tập, nghỉ ngơi phù hợp với bạn.</p>
+                    <div class="version-info">
+                        <small>Version 2.0.0 - Professional Edition</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Keyboard Shortcuts -->
+            <div class="sidebar-section keyboard-shortcuts">
+                <h3>⌨️ Phím tắt</h3>
+                <div class="shortcut-list">
+                    <div class="shortcut-item">
+                        <kbd>Ctrl</kbd> + <kbd>K</kbd>
+                        <span>Focus input</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl</kbd> + <kbd>L</kbd>
+                        <span>Xóa chat</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl</kbd> + <kbd>D</kbd>
+                        <span>Chế độ tối</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Emoji Picker (hidden by default) -->
+    <div class="emoji-picker" id="emojiPicker" style="display: none;">
+        <div class="emoji-grid">
+            <span class="emoji-item">😊</span>
+            <span class="emoji-item">😂</span>
+            <span class="emoji-item">❤️</span>
+            <span class="emoji-item">👍</span>
+            <span class="emoji-item">🎉</span>
+            <span class="emoji-item">📚</span>
+            <span class="emoji-item">📝</span>
+            <span class="emoji-item">⏰</span>
+            <span class="emoji-item">💡</span>
+            <span class="emoji-item">🌟</span>
+            <span class="emoji-item">🔥</span>
+            <span class="emoji-item">✨</span>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div class="notification-container" id="notificationContainer"></div>
 
     <script src="/static/script.js"></script>
 </body>
